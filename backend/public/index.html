@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TEC Esports Tournament Platform</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    }
+    
+    body {
+      background-color: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    .navbar {
+      background: linear-gradient(90deg, #1a2a6c, #b21f1f, #fdbb2d);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      color: white;
+    }
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo-icon {
+      margin-right: 0.5rem;
+      font-size: 1.5rem;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+    
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+    
+    .nav-link:hover {
+      color: #f0f0f0;
+    }
+    
+    .nav-icon {
+      margin-right: 0.5rem;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    
+    .hero {
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 5rem 2rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      text-align: center;
+    }
+    
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+      background: #1a2a6c;
+      color: white;
+      border: none;
+    }
+    
+    .btn-primary:hover {
+      background: #15225a;
+    }
+    
+    .btn-secondary {
+      background: #b21f1f;
+      color: white;
+      border: none;
+    }
+    
+    .btn-secondary:hover {
+      background: #9a1b1b;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+      color: #1a2a6c;
+      margin: 3rem 0 1.5rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .section-icon {
+      margin-right: 0.75rem;
+      font-size: 1.8rem;
+    }
+    
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .card-image {
+      height: 200px;
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .card-content {
+      padding: 1.5rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .card-title {
+      font-size: 1.4rem;
+      margin: 0 0 0.8rem;
+      color: #1a2a6c;
+    }
+    
+    .card-description {
+      color: #666;
+      margin-bottom: 1rem;
+      flex-grow: 1;
+    }
+    
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+    }
+    
+    .feature-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+    
+    .feature-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    
+    .feature-icon {
+      font-size: 2.5rem;
+      color: #1a2a6c;
+      margin-bottom: 1rem;
+    }
+    
+    .feature-title {
+      font-size: 1.5rem;
+      color: #1a2a6c;
+      margin-bottom: 1rem;
+    }
+    
+    .feature-description {
+      color: #666;
+    }
+    
+    .footer {
+      background: #1a2a6c;
+      color: white;
+      padding: 3rem 2rem 2rem;
+      margin-top: 3rem;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    
+    .footer-section {
+      margin-bottom: 1.5rem;
+    }
+    
+    .footer-title {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .footer-link {
+      color: #ddd;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    
+    .footer-link:hover {
+      color: white;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .social-icon {
+      color: white;
+      font-size: 1.5rem;
+    }
+    
+    .social-icon:hover {
+      color: #fdbb2d;
+    }
+    
+    .copyright {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    .status-upcoming {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    
+    .status-ongoing {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    
+    .status-completed {
+      background-color: #e9ecef;
+      color: #495057;
+    }
+    
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero p {
+        font-size: 1rem;
+      }
+      
+      .section-title {
+        font-size: 1.8rem;
+      }
+    }
+    
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    
+    .modal-content {
+      background-color: white;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    .modal-header h2 {
+      margin: 0;
+      color: #1a2a6c;
+    }
+    
+    .modal-close {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #aaa;
+      cursor: pointer;
+    }
+    
+    .modal-close:hover {
+      color: #333;
+    }
+    
+    .modal-body {
+      padding: 1.5rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    /* Additional styles */
+    .text-center {
+      text-align: center;
+    }
+    
+    .mt-4 {
+      margin-top: 2rem;
+    }
+    
+    /* Card button styles */
+    .card-footer .btn {
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .card-footer .btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    /* Tournament modal styles */
+    .tournament-modal,
+    .game-modal {
+      max-width: 800px;
+      width: 90%;
+    }
+    
+    .tournament-banner,
+    .game-banner {
+      height: 200px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 4px;
+      margin-bottom: 1.5rem;
+    }
+    
+    .tournament-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border-radius: 4px;
+    }
+    
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .meta-label {
+      font-size: 0.8rem;
+      color: #666;
+      margin-bottom: 0.25rem;
+    }
+    
+    .meta-value {
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .tournament-description,
+    .tournament-details,
+    .game-description {
+      margin-bottom: 1.5rem;
+    }
+    
+    .detail-section {
+      margin-bottom: 1.5rem;
+    }
+    
+    .detail-section h3 {
+      color: #1a2a6c;
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+    
+    .detail-section pre {
+      white-space: pre-wrap;
+      font-family: inherit;
+      margin: 0;
+      padding: 0;
+      color: #555;
+    }
+    
+    .tournament-actions,
+    .game-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      border-top: 1px solid #eee;
+      padding-top: 1.5rem;
+    }
+    
+    .tournament-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .tournament-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      border-left: 4px solid #1a2a6c;
+    }
+    
+    .tournament-item-info {
+      flex: 1;
+    }
+    
+    .tournament-item h4 {
+      margin: 0 0 0.5rem;
+      color: #1a2a6c;
+    }
+    
+    .tournament-item-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.9rem;
+    }
+    
+    .tournament-dates {
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">
+      <span class="logo-icon">🏆</span> TEC Esports
+    </div>
+    <div class="nav-links">
+      <a href="#games" class="nav-link">
+        <span class="nav-icon">🎮</span> Games
+      </a>
+      <a href="#" class="nav-link" data-action="login">
+        <span class="nav-icon">🔑</span> Login
+      </a>
+      <a href="#" class="nav-link" data-action="register">
+        <span class="nav-icon">📝</span> Register
+      </a>
+    </div>
+  </nav>
+  
+  <div class="container">
+    <div class="hero">
+      <h1>TEC Esports Tournament Platform</h1>
+      <p>Join the ultimate esports experience. Compete in tournaments, manage your teams, and rise to the top of the leaderboards.</p>
+      <div class="btn-group">
+        <a href="#" class="btn btn-primary" data-action="register">Create Account</a>
+        <a href="#games" class="btn btn-secondary">Browse Tournaments</a>
+      </div>
+    </div>
+    
+    <h2 id="games" class="section-title">
+      <span class="section-icon">🎮</span> Featured Games
+    </h2>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+        <div class="card-content">
+          <h3 class="card-title">Valorant</h3>
+          <p class="card-description">A 5v5 character-based tactical shooter where precise gunplay meets unique agent abilities.</p>
+          <div class="card-footer">
+            <a href="#" class="btn btn-primary" style="font-size: 0.875rem; padding: 0.5rem 1rem;" data-action="view-game" data-id="1">View Tournaments</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1560253023-3ec5d502959f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+        <div class="card-content">
+          <h3 class="card-title">BGMI</h3>
+          <p class="card-description">Battlegrounds Mobile India - A battle royale game where players fight to be the last one standing.</p>
+          <div class="card-footer">
+            <a href="#" class="btn btn-primary" style="font-size: 0.875rem; padding: 0.5rem 1rem;" data-action="view-game" data-id="2">View Tournaments</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+        <div class="card-content">
+          <h3 class="card-title">Free Fire</h3>
+          <p class="card-description">A mobile battle royale game with fast-paced matches and unique character abilities.</p>
+          <div class="card-footer">
+            <a href="#" class="btn btn-primary" style="font-size: 0.875rem; padding: 0.5rem 1rem;" data-action="view-game" data-id="3">View Tournaments</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+        <div class="card-content">
+          <h3 class="card-title">Call of Duty: Mobile</h3>
+          <p class="card-description">Experience the thrill of the Call of Duty franchise on your mobile device.</p>
+          <div class="card-footer">
+            <a href="#" class="btn btn-primary" style="font-size: 0.875rem; padding: 0.5rem 1rem;" data-action="view-game" data-id="4">View Tournaments</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <h2 class="section-title">
+      <span class="section-icon">🏆</span> Upcoming Tournaments
+    </h2>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1511882150382-421056c89033?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+        <div class="card-content">
+          <h3 class="card-title">TEC Showdown Cup</h3>
+          <p class="card-description">
+            Game: Valorant<br>
+            Format: Single Elimination<br>
+            Status: <span class="status-badge status-upcoming">Upcoming</span>
+          </p>
+          <div class="card-footer">
+            <a href="#" class="btn btn-primary" style="font-size: 0.875rem; padding: 0.5rem 1rem;" data-action="view-details" data-id="1">View Details</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+        <div class="card-content">
+          <h3 class="card-title">TEC Royale Battle</h3>
+          <p class="card-description">
+            Game: BGMI<br>
+            Format: Battle Royale<br>
+            Status: <span class="status-badge status-upcoming">Upcoming</span>
+          </p>
+          <div class="card-footer">
+            <a href="#" class="btn btn-primary" style="font-size: 0.875rem; padding: 0.5rem 1rem;" data-action="view-details" data-id="2">View Details</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1542751110-97427bbecf20?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+        <div class="card-content">
+          <h3 class="card-title">TEC Firestorm Series</h3>
+          <p class="card-description">
+            Game: Free Fire<br>
+            Format: Round Robin<br>
+            Status: <span class="status-badge status-ongoing">Ongoing</span>
+          </p>
+          <div class="card-footer">
+            <a href="#" class="btn btn-primary" style="font-size: 0.875rem; padding: 0.5rem 1rem;" data-action="view-details" data-id="3">View Details</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1519326844852-704caea5679e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+        <div class="card-content">
+          <h3 class="card-title">TEC CODM Open League</h3>
+          <p class="card-description">
+            Game: Call of Duty: Mobile<br>
+            Format: Double Elimination<br>
+            Status: <span class="status-badge status-upcoming">Upcoming</span>
+          </p>
+          <div class="card-footer">
+            <a href="#" class="btn btn-primary" style="font-size: 0.875rem; padding: 0.5rem 1rem;" data-action="view-details" data-id="4">View Details</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <h2 class="section-title">
+      <span class="section-icon">👥</span> Why Choose TEC Esports
+    </h2>
+    <div class="feature-section">
+      <div class="feature-card">
+        <div class="feature-icon">🎮</div>
+        <h3 class="feature-title">Diverse Game Selection</h3>
+        <p class="feature-description">From Valorant to BGMI, we host tournaments for all your favorite esports titles.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">🏆</div>
+        <h3 class="feature-title">Professional Tournament Management</h3>
+        <p class="feature-description">Our platform provides tools for organizers to create and manage tournaments with ease.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">👥</div>
+        <h3 class="feature-title">Community-Focused</h3>
+        <p class="feature-description">Connect with players, form teams, and participate in a thriving esports community.</p>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3 class="footer-title">
+          <span class="logo-icon">🏆</span> TEC Esports
+        </h3>
+        <p>The premier platform for esports tournament management. Organize, compete, and win in your favorite games.</p>
+        <div class="social-links">
+          <a href="#" class="social-icon">📱</a>
+          <a href="#" class="social-icon">💬</a>
+          <a href="#" class="social-icon">📺</a>
+        </div>
+      </div>
+      
+      <div class="footer-section">
+        <h3 class="footer-title">
+          <span class="logo-icon">🎮</span> Popular Games
+        </h3>
+        <a href="#" class="footer-link">Valorant</a>
+        <a href="#" class="footer-link">BGMI</a>
+        <a href="#" class="footer-link">Free Fire</a>
+        <a href="#" class="footer-link">Call of Duty: Mobile</a>
+        <a href="#" class="footer-link">Rocket League</a>
+      </div>
+      
+      <div class="footer-section">
+        <h3 class="footer-title">
+          <span class="logo-icon">🏆</span> Tournaments
+        </h3>
+        <a href="#" class="footer-link">Upcoming Tournaments</a>
+        <a href="#" class="footer-link">Ongoing Tournaments</a>
+        <a href="#" class="footer-link">Past Results</a>
+        <a href="#" class="footer-link">Tournament Rules</a>
+        <a href="#" class="footer-link">Prize Pools</a>
+      </div>
+      
+      <div class="footer-section">
+        <h3 class="footer-title">
+          <span class="logo-icon">✉️</span> Contact Us
+        </h3>
+        <p>Have questions or need support?</p>
+        <p>Email: support@tecesports.com</p>
+        <p>Discord: TEC Esports Server</p>
+        <p>Hours: 9am - 6pm IST</p>
+      </div>
+    </div>
+    
+    <div class="copyright">
+      &copy; 2025 TEC Esports Tournament Platform. All rights reserved.
+    </div>
+  </footer>
+  
+  <script>
+    // Check if user is logged in on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get all buttons with links and navigation links
+      const actionButtons = document.querySelectorAll('[data-action]');
+      
+      // Add click event listeners to buttons
+      actionButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          const action = this.getAttribute('data-action');
+          
+          if (action === 'register') {
+            e.preventDefault();
+            showRegisterModal();
+          } else if (action === 'login') {
+            e.preventDefault();
+            showLoginModal();
+          } else if (action === 'logout') {
+            e.preventDefault();
+            logout();
+          } else if (action === 'view-details') {
+            e.preventDefault();
+            // Show tournament details modal
+            const tournamentId = this.getAttribute('data-id');
+            showTournamentDetails(tournamentId);
+          } else if (action === 'view-game') {
+            e.preventDefault();
+            // Show game tournaments modal
+            const gameId = this.getAttribute('data-id');
+            showGameTournaments(gameId);
+          }
+        });
+      });
+      
+      // Close modals when clicking outside
+      document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('modal-overlay')) {
+          closeAllModals();
+        }
+      });
+      
+      // Prevent default behavior for hash links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          if (!this.hasAttribute('data-action')) {
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+              e.preventDefault();
+              target.scrollIntoView({
+                behavior: 'smooth'
+              });
+            }
+          }
+        });
+      });
+      
+      // Check if user is logged in
+      checkLoginStatus();
+    });
+    
+    // Check login status and update UI accordingly
+    function checkLoginStatus() {
+      const userToken = localStorage.getItem('userToken');
+      const userInfo = localStorage.getItem('userInfo');
+      
+      if (userToken && userInfo) {
+        // User is logged in
+        const user = JSON.parse(userInfo);
+        updateUIForLoggedInUser(user);
+      }
+    }
+    
+    // Update UI for logged in user
+    function updateUIForLoggedInUser(user) {
+      // Update navigation
+      const navLinks = document.querySelector('.nav-links');
+      navLinks.innerHTML = `
+        <a href="#games" class="nav-link">
+          <span class="nav-icon">🎮</span> Games
+        </a>
+        <a href="#" class="nav-link" data-action="profile">
+          <span class="nav-icon">👤</span> ${user.name || 'Profile'}
+        </a>
+        <a href="#" class="nav-link" data-action="logout">
+          <span class="nav-icon">🚪</span> Logout
+        </a>
+      `;
+      
+      // Update hero section if it exists
+      const heroButtons = document.querySelector('.hero .btn-group');
+      if (heroButtons) {
+        heroButtons.innerHTML = `
+          <a href="#tournaments" class="btn btn-primary">My Tournaments</a>
+          <a href="#games" class="btn btn-secondary">Browse Tournaments</a>
+        `;
+      }
+      
+      // Add role-specific UI elements
+      if (user.role === 'organizer') {
+        // Add organizer-specific elements
+        const gamesSection = document.querySelector('#games');
+        if (gamesSection) {
+          const createTournamentButton = document.createElement('div');
+          createTournamentButton.className = 'text-center mt-4';
+          createTournamentButton.innerHTML = `
+            <a href="#" class="btn btn-primary" data-action="create-tournament">
+              <span class="nav-icon">➕</span> Create Tournament
+            </a>
+          `;
+          gamesSection.parentNode.insertBefore(createTournamentButton, gamesSection.nextSibling);
+        }
+      } else if (user.role === 'admin') {
+        // Add admin-specific elements
+      }
+    }
+    
+    // Logout function
+    function logout() {
+      localStorage.removeItem('userToken');
+      localStorage.removeItem('userInfo');
+      
+      // Reset UI
+      const navLinks = document.querySelector('.nav-links');
+      navLinks.innerHTML = `
+        <a href="#games" class="nav-link">
+          <span class="nav-icon">🎮</span> Games
+        </a>
+        <a href="#" class="nav-link" data-action="login">
+          <span class="nav-icon">🔑</span> Login
+        </a>
+        <a href="#" class="nav-link" data-action="register">
+          <span class="nav-icon">📝</span> Register
+        </a>
+      `;
+      
+      // Update hero section if it exists
+      const heroButtons = document.querySelector('.hero .btn-group');
+      if (heroButtons) {
+        heroButtons.innerHTML = `
+          <a href="#" class="btn btn-primary" data-action="register">Create Account</a>
+          <a href="#games" class="btn btn-secondary">Browse Tournaments</a>
+        `;
+      }
+      
+      // Remove any role-specific elements
+      const createTournamentButton = document.querySelector('.text-center.mt-4');
+      if (createTournamentButton) {
+        createTournamentButton.remove();
+      }
+      
+      alert('You have been logged out successfully.');
+      
+      // Reload event listeners
+      document.querySelectorAll('[data-action]').forEach(button => {
+        button.addEventListener('click', function(e) {
+          const action = this.getAttribute('data-action');
+          
+          if (action === 'register') {
+            e.preventDefault();
+            showRegisterModal();
+          } else if (action === 'login') {
+            e.preventDefault();
+            showLoginModal();
+          }
+        });
+      });
+    }
+    
+    // Show register modal
+    function showRegisterModal() {
+      const modalHTML = `
+        <div class="modal-overlay" id="registerModal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2>Create Account</h2>
+              <span class="modal-close" onclick="closeAllModals()">&times;</span>
+            </div>
+            <div class="modal-body">
+              <form id="registerForm">
+                <div class="form-group">
+                  <label for="name">Full Name</label>
+                  <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                  <label for="confirmPassword">Confirm Password</label>
+                  <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                <div class="form-group">
+                  <label for="role">Role</label>
+                  <select id="role" name="role" required>
+                    <option value="player">Player</option>
+                    <option value="organizer">Tournament Organizer</option>
+                  </select>
+                </div>
+                <div class="form-actions">
+                  <button type="button" class="btn btn-secondary" onclick="closeAllModals()">Cancel</button>
+                  <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+      
+      // Add form submit event
+      document.getElementById('registerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const role = document.getElementById('role').value;
+        
+        // Validate passwords match
+        if (password !== confirmPassword) {
+          alert('Passwords do not match!');
+          return;
+        }
+        
+        // Prepare data for API call
+        const userData = {
+          name,
+          email,
+          password,
+          role
+        };
+        
+        // Call the API
+        fetch('/api/users/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(userData)
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            alert('Registration failed: ' + data.error);
+          } else {
+            // Store token in localStorage
+            localStorage.setItem('userToken', data.token);
+            localStorage.setItem('userInfo', JSON.stringify(data));
+            
+            alert('Login successful!');
+            closeAllModals();
+            
+            // Update UI for logged in user
+            updateUIForLoggedInUser(data);
+            
+            // Redirect based on role (commented out for now to stay on the same page)
+            /*
+            if (data.role === 'admin') {
+              window.location.href = '/admin/dashboard';
+            } else if (data.role === 'organizer') {
+              window.location.href = '/organizer/dashboard';
+            } else {
+              window.location.href = '/player/dashboard';
+            }
+            */
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('An error occurred during registration. Please try again.');
+        });
+      });
+    }
+    
+    // Show login modal
+    function showLoginModal() {
+      const modalHTML = `
+        <div class="modal-overlay" id="loginModal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2>Login</h2>
+              <span class="modal-close" onclick="closeAllModals()">&times;</span>
+            </div>
+            <div class="modal-body">
+              <form id="loginForm">
+                <div class="form-group">
+                  <label for="loginEmail">Email</label>
+                  <input type="email" id="loginEmail" name="loginEmail" required>
+                </div>
+                <div class="form-group">
+                  <label for="loginPassword">Password</label>
+                  <input type="password" id="loginPassword" name="loginPassword" required>
+                </div>
+                <div class="form-actions">
+                  <button type="button" class="btn btn-secondary" onclick="closeAllModals()">Cancel</button>
+                  <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+      
+      // Add form submit event
+      document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        
+        // Prepare data for API call
+        const userData = {
+          email,
+          password
+        };
+        
+        // Call the API
+        fetch('/api/users/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(userData)
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            alert('Login failed: ' + data.error);
+          } else {
+            // Store token in localStorage
+            localStorage.setItem('userToken', data.token);
+            localStorage.setItem('userInfo', JSON.stringify(data));
+            
+            alert('Login successful!');
+            closeAllModals();
+            
+            // Update UI for logged in user
+            updateUIForLoggedInUser(data);
+            
+            // Redirect based on role (commented out for now to stay on the same page)
+            /*
+            if (data.role === 'admin') {
+              window.location.href = '/admin/dashboard';
+            } else if (data.role === 'organizer') {
+              window.location.href = '/organizer/dashboard';
+            } else {
+              window.location.href = '/player/dashboard';
+            }
+            */
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('An error occurred during login. Please try again.');
+        });
+      });
+    }
+    
+    // Show tournament details modal
+    function showTournamentDetails(tournamentId) {
+      // Tournament data (in a real app, this would come from an API)
+      const tournaments = {
+        "1": {
+          name: "TEC Showdown Cup",
+          game: "Valorant",
+          format: "Single Elimination",
+          status: "Upcoming",
+          startDate: "May 15, 2025",
+          endDate: "May 20, 2025",
+          prizePool: "$5,000",
+          description: "The TEC Showdown Cup is our premier Valorant tournament featuring the best teams from across the region. Compete in intense 5v5 tactical gameplay and showcase your skills.",
+          rules: "• 5v5 team format\n• Map pool: Haven, Bind, Split, Ascent, Icebox\n• Best of 3 matches (Finals: Best of 5)\n• Standard competitive rules apply",
+          eligibility: "Open to all players aged 16+",
+          registration: {
+            deadline: "May 10, 2025",
+            fee: "$20 per team",
+            slots: "32 teams (16 slots remaining)"
+          },
+          organizer: "TEC Esports",
+          contact: "tournaments@tecesports.com"
+        },
+        "2": {
+          name: "TEC Royale Battle",
+          game: "BGMI",
+          format: "Battle Royale",
+          status: "Upcoming",
+          startDate: "May 22, 2025",
+          endDate: "May 25, 2025",
+          prizePool: "$3,500",
+          description: "The ultimate battle royale showdown for BGMI players. Drop in, gear up, and be the last squad standing in this intense competition.",
+          rules: "• Squad format (4 players)\n• 6 matches across 3 days\n• Points system: Placement + Kills\n• Custom room matches",
+          eligibility: "Open to all players aged 16+",
+          registration: {
+            deadline: "May 18, 2025",
+            fee: "$15 per team",
+            slots: "25 teams (10 slots remaining)"
+          },
+          organizer: "TEC Esports",
+          contact: "tournaments@tecesports.com"
+        },
+        "3": {
+          name: "TEC Firestorm Series",
+          game: "Free Fire",
+          format: "Round Robin",
+          status: "Ongoing",
+          startDate: "April 28, 2025",
+          endDate: "May 12, 2025",
+          prizePool: "$2,500",
+          description: "The TEC Firestorm Series brings together the best Free Fire teams for a round-robin tournament with intense action and strategic gameplay.",
+          rules: "• Squad format (4 players)\n• Round-robin group stage followed by playoffs\n• 4 groups of 6 teams each\n• Top 2 teams from each group advance",
+          eligibility: "Open to all players aged 16+",
+          registration: {
+            deadline: "Closed",
+            fee: "$10 per team",
+            slots: "24 teams (Full)"
+          },
+          organizer: "TEC Esports",
+          contact: "tournaments@tecesports.com"
+        },
+        "4": {
+          name: "TEC CODM Open League",
+          game: "Call of Duty: Mobile",
+          format: "Double Elimination",
+          status: "Upcoming",
+          startDate: "June 5, 2025",
+          endDate: "June 15, 2025",
+          prizePool: "$4,000",
+          description: "The TEC CODM Open League features intense multiplayer action across various game modes. Compete in this double-elimination tournament and prove your team's dominance.",
+          rules: "• 5v5 team format\n• Game modes: Hardpoint, Search & Destroy, Domination\n• Best of 5 series\n• Double elimination bracket",
+          eligibility: "Open to all players aged 16+",
+          registration: {
+            deadline: "June 1, 2025",
+            fee: "$15 per team",
+            slots: "32 teams (25 slots remaining)"
+          },
+          organizer: "TEC Esports",
+          contact: "tournaments@tecesports.com"
+        }
+      };
+      
+      const tournament = tournaments[tournamentId];
+      
+      if (!tournament) {
+        alert("Tournament details not found.");
+        return;
+      }
+      
+      // Create modal HTML
+      const modalHTML = `
+        <div class="modal-overlay" id="tournamentModal">
+          <div class="modal-content tournament-modal">
+            <div class="modal-header">
+              <h2>${tournament.name}</h2>
+              <span class="modal-close" onclick="closeAllModals()">&times;</span>
+            </div>
+            <div class="modal-body">
+              <div class="tournament-banner" style="background-image: url('https://images.unsplash.com/photo-1511882150382-421056c89033?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+              
+              <div class="tournament-info">
+                <div class="tournament-meta">
+                  <div class="meta-item">
+                    <span class="meta-label">Game</span>
+                    <span class="meta-value">${tournament.game}</span>
+                  </div>
+                  <div class="meta-item">
+                    <span class="meta-label">Format</span>
+                    <span class="meta-value">${tournament.format}</span>
+                  </div>
+                  <div class="meta-item">
+                    <span class="meta-label">Status</span>
+                    <span class="meta-value status-badge status-${tournament.status.toLowerCase()}">${tournament.status}</span>
+                  </div>
+                  <div class="meta-item">
+                    <span class="meta-label">Dates</span>
+                    <span class="meta-value">${tournament.startDate} - ${tournament.endDate}</span>
+                  </div>
+                  <div class="meta-item">
+                    <span class="meta-label">Prize Pool</span>
+                    <span class="meta-value">${tournament.prizePool}</span>
+                  </div>
+                </div>
+                
+                <div class="tournament-description">
+                  <h3>About the Tournament</h3>
+                  <p>${tournament.description}</p>
+                </div>
+                
+                <div class="tournament-details">
+                  <div class="detail-section">
+                    <h3>Rules</h3>
+                    <pre>${tournament.rules}</pre>
+                  </div>
+                  
+                  <div class="detail-section">
+                    <h3>Eligibility</h3>
+                    <p>${tournament.eligibility}</p>
+                  </div>
+                  
+                  <div class="detail-section">
+                    <h3>Registration</h3>
+                    <ul>
+                      <li><strong>Deadline:</strong> ${tournament.registration.deadline}</li>
+                      <li><strong>Fee:</strong> ${tournament.registration.fee}</li>
+                      <li><strong>Slots:</strong> ${tournament.registration.slots}</li>
+                    </ul>
+                  </div>
+                  
+                  <div class="detail-section">
+                    <h3>Contact</h3>
+                    <p><strong>Organizer:</strong> ${tournament.organizer}<br>
+                    <strong>Email:</strong> ${tournament.contact}</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="tournament-actions">
+                ${tournament.status === "Upcoming" ? 
+                  `<button class="btn btn-primary" onclick="registerForTournament('${tournamentId}')">Register Now</button>` : 
+                  tournament.status === "Ongoing" ? 
+                  `<button class="btn btn-secondary" onclick="viewTournamentBracket('${tournamentId}')">View Bracket</button>` :
+                  `<button class="btn btn-secondary" onclick="viewTournamentResults('${tournamentId}')">View Results</button>`
+                }
+                <button class="btn btn-secondary" onclick="closeAllModals()">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+    }
+    
+    // Show game tournaments modal
+    function showGameTournaments(gameId) {
+      // Game data (in a real app, this would come from an API)
+      const games = {
+        "1": {
+          name: "Valorant",
+          description: "A 5v5 character-based tactical shooter where precise gunplay meets unique agent abilities.",
+          tournaments: [
+            { id: "1", name: "TEC Showdown Cup", status: "Upcoming", dates: "May 15-20, 2025" },
+            { id: "5", name: "Valorant Pro League", status: "Upcoming", dates: "July 10-25, 2025" },
+            { id: "6", name: "Tactical Masters", status: "Completed", dates: "March 5-15, 2025" }
+          ]
+        },
+        "2": {
+          name: "BGMI",
+          description: "Battlegrounds Mobile India - A battle royale game where players fight to be the last one standing.",
+          tournaments: [
+            { id: "2", name: "TEC Royale Battle", status: "Upcoming", dates: "May 22-25, 2025" },
+            { id: "7", name: "BGMI Invitational", status: "Upcoming", dates: "June 15-20, 2025" },
+            { id: "8", name: "Battle Royale Cup", status: "Completed", dates: "February 10-15, 2025" }
+          ]
+        },
+        "3": {
+          name: "Free Fire",
+          description: "A mobile battle royale game with fast-paced matches and unique character abilities.",
+          tournaments: [
+            { id: "3", name: "TEC Firestorm Series", status: "Ongoing", dates: "April 28 - May 12, 2025" },
+            { id: "9", name: "Free Fire Pro League", status: "Upcoming", dates: "June 5-15, 2025" },
+            { id: "10", name: "Survival Challenge", status: "Completed", dates: "January 20-30, 2025" }
+          ]
+        },
+        "4": {
+          name: "Call of Duty: Mobile",
+          description: "Experience the thrill of the Call of Duty franchise on your mobile device.",
+          tournaments: [
+            { id: "4", name: "TEC CODM Open League", status: "Upcoming", dates: "June 5-15, 2025" },
+            { id: "11", name: "CODM Championship", status: "Upcoming", dates: "July 1-15, 2025" },
+            { id: "12", name: "Warfare Masters", status: "Completed", dates: "March 15-25, 2025" }
+          ]
+        }
+      };
+      
+      const game = games[gameId];
+      
+      if (!game) {
+        alert("Game details not found.");
+        return;
+      }
+      
+      // Create modal HTML
+      const modalHTML = `
+        <div class="modal-overlay" id="gameTournamentsModal">
+          <div class="modal-content game-modal">
+            <div class="modal-header">
+              <h2>${game.name} Tournaments</h2>
+              <span class="modal-close" onclick="closeAllModals()">&times;</span>
+            </div>
+            <div class="modal-body">
+              <div class="game-banner" style="background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+              
+              <div class="game-description">
+                <p>${game.description}</p>
+              </div>
+              
+              <h3>Available Tournaments</h3>
+              <div class="tournament-list">
+                ${game.tournaments.map(tournament => `
+                  <div class="tournament-item">
+                    <div class="tournament-item-info">
+                      <h4>${tournament.name}</h4>
+                      <div class="tournament-item-meta">
+                        <span class="tournament-dates">${tournament.dates}</span>
+                        <span class="status-badge status-${tournament.status.toLowerCase()}">${tournament.status}</span>
+                      </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="showTournamentDetails('${tournament.id}')">View Details</button>
+                  </div>
+                `).join('')}
+              </div>
+              
+              <div class="game-actions">
+                <button class="btn btn-secondary" onclick="closeAllModals()">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+    }
+    
+    // Register for tournament function
+    function registerForTournament(tournamentId) {
+      // Check if user is logged in
+      const userToken = localStorage.getItem('userToken');
+      const userInfo = localStorage.getItem('userInfo');
+      
+      if (!userToken || !userInfo) {
+        alert("Please log in to register for tournaments.");
+        closeAllModals();
+        showLoginModal();
+        return;
+      }
+      
+      // In a real app, this would make an API call to register
+      alert(`Registration submitted for tournament ID: ${tournamentId}`);
+    }
+    
+    // View tournament bracket function
+    function viewTournamentBracket(tournamentId) {
+      alert(`Viewing bracket for tournament ID: ${tournamentId}`);
+      // This would navigate to the bracket page in a real app
+    }
+    
+    // View tournament results function
+    function viewTournamentResults(tournamentId) {
+      alert(`Viewing results for tournament ID: ${tournamentId}`);
+      // This would navigate to the results page in a real app
+    }
+    
+    // Close all modals
+    function closeAllModals() {
+      const modals = document.querySelectorAll('.modal-overlay');
+      modals.forEach(modal => {
+        modal.remove();
+      });
+    }
+  </script>
+</body>
+</html>
