@@ -15,7 +15,7 @@ const HomeContainer = styled.div`
 `;
 
 const HeroBanner = styled.div`
-  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('IMAGE_HOMEPAGE_BANNER');
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
   background-size: cover;
   background-position: center;
   color: white;
@@ -130,10 +130,17 @@ const Home = () => {
           getAllTournaments()
         ]);
         
-        setGames(gamesData.slice(0, 4)); // Show only 4 games on homepage
-        setTournaments(tournamentsData.slice(0, 4)); // Show only 4 tournaments on homepage
+        // Provide fallback data if API returns empty arrays
+        const games = gamesData && gamesData.length > 0 ? gamesData : getFallbackGames();
+        const tournaments = tournamentsData && tournamentsData.length > 0 ? tournamentsData : getFallbackTournaments();
+        
+        setGames(games.slice(0, 4)); // Show only 4 games on homepage
+        setTournaments(tournaments.slice(0, 4)); // Show only 4 tournaments on homepage
       } catch (error) {
         console.error('Error fetching data:', error);
+        // Set fallback data if API calls fail
+        setGames(getFallbackGames().slice(0, 4));
+        setTournaments(getFallbackTournaments().slice(0, 4));
       } finally {
         setLoading(false);
       }
@@ -141,6 +148,65 @@ const Home = () => {
     
     fetchData();
   }, []);
+  
+  // Fallback data in case API calls fail
+  const getFallbackGames = () => {
+    return [
+      {
+        _id: 'game1',
+        name: 'Valorant',
+        description: 'A 5v5 character-based tactical FPS by Riot Games',
+        imageUrl: 'https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt3f072336e3f3ade4/63096d7be4a8c30e088e7720/Valorant_2022_E5A2_PlayVALORANT_ContentStackThumbnail_1200x625_MB01.png'
+      },
+      {
+        _id: 'game2',
+        name: 'League of Legends',
+        description: 'A popular MOBA game developed by Riot Games',
+        imageUrl: 'https://cdn1.epicgames.com/offer/24b9b5e323bc40eea252a10cdd3b2f10/EGS_LeagueofLegends_RiotGames_S1_2560x1440-80471666c140f790f28dff68d72c384b'
+      },
+      {
+        _id: 'game3',
+        name: 'Counter-Strike 2',
+        description: 'The next evolution of the iconic FPS from Valve',
+        imageUrl: 'https://cdn.cloudflare.steamstatic.com/steam/apps/730/capsule_616x353.jpg'
+      },
+      {
+        _id: 'game4',
+        name: 'Dota 2',
+        description: 'A free-to-play MOBA game by Valve',
+        imageUrl: 'https://cdn.cloudflare.steamstatic.com/steam/apps/570/capsule_616x353.jpg'
+      }
+    ];
+  };
+  
+  const getFallbackTournaments = () => {
+    return [
+      {
+        _id: 'tournament1',
+        name: 'Valorant Championship 2025',
+        format: 'Single Elimination',
+        imageUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
+      },
+      {
+        _id: 'tournament2',
+        name: 'League of Legends World Cup',
+        format: 'Double Elimination',
+        imageUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
+      },
+      {
+        _id: 'tournament3',
+        name: 'CS2 Pro League Season 5',
+        format: 'Round Robin',
+        imageUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
+      },
+      {
+        _id: 'tournament4',
+        name: 'Dota 2 International',
+        format: 'Swiss System',
+        imageUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
+      }
+    ];
+  };
   
   if (loading) {
     return <Loader fullPage text="Loading content..." />;

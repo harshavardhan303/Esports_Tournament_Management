@@ -53,7 +53,7 @@ const InputGroup = styled.div`
   border: 1px solid #ddd;
   border-radius: 4px;
   overflow: hidden;
-  
+
   &:focus-within {
     border-color: #1a2a6c;
     box-shadow: 0 0 0 2px rgba(26, 42, 108, 0.2);
@@ -76,7 +76,7 @@ const Input = styled.input`
   border: none;
   outline: none;
   font-size: 1rem;
-  
+
   &:focus {
     outline: none;
   }
@@ -90,12 +90,12 @@ const RegisterLink = styled.div`
   text-align: center;
   margin-top: 1.5rem;
   color: #666;
-  
+
   a {
     color: #1a2a6c;
     text-decoration: none;
     font-weight: 500;
-    
+
     &:hover {
       text-decoration: underline;
     }
@@ -107,45 +107,45 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  
+
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!email || !password) {
       setError('Please enter both email and password');
       return;
     }
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
       const result = await login(email, password);
-      
-      if (result.success) {
+
+      if (result?.success) {
         navigate('/');
       } else {
-        setError(result.error);
+        setError(result?.error || 'Login failed. Please try again.');
       }
     } catch (err) {
-      setError(err.message || 'Login failed. Please try again.');
+      setError(err.message || 'An unexpected error occurred.');
     } finally {
       setLoading(false);
     }
   };
-  
+
   return (
     <LoginContainer>
       <LoginHeader>
         <LoginTitle>Welcome Back</LoginTitle>
         <LoginSubtitle>Sign in to access your account</LoginSubtitle>
       </LoginHeader>
-      
+
       {error && <Alert type="danger">{error}</Alert>}
-      
+
       <Form onSubmit={handleSubmit}>
         <FormGroup>
           <Label htmlFor="email">Email Address</Label>
@@ -163,7 +163,7 @@ const Login = () => {
             />
           </InputGroup>
         </FormGroup>
-        
+
         <FormGroup>
           <Label htmlFor="password">Password</Label>
           <InputGroup>
@@ -180,13 +180,9 @@ const Login = () => {
             />
           </InputGroup>
         </FormGroup>
-        
+
         <ButtonContainer>
-          <Button 
-            type="submit" 
-            disabled={loading} 
-            style={{ width: '100%' }}
-          >
+          <Button type="submit" disabled={loading} style={{ width: '100%' }}>
             {loading ? (
               <>
                 <Loader size="small" text="" /> Signing In...
@@ -199,7 +195,7 @@ const Login = () => {
           </Button>
         </ButtonContainer>
       </Form>
-      
+
       <RegisterLink>
         Don't have an account? <Link to="/register">Register now</Link>
       </RegisterLink>

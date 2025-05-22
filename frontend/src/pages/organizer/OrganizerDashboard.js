@@ -203,22 +203,23 @@ const StatusBadge = styled.span`
   font-weight: 600;
   text-transform: uppercase;
   background-color: ${props => {
-    switch (props.status) {
-      case 'upcoming': return '#d4edda';
-      case 'ongoing': return '#fff3cd';
-      case 'completed': return '#e9ecef';
+    switch (props.$status) {
+      case 'upcoming': return 'rgba(40, 167, 69, 0.2)'; // green
+      case 'ongoing': return 'rgba(253, 126, 20, 0.2)'; // orange/yellow
+      case 'completed': return 'rgba(220, 53, 69, 0.2)'; // red
       default: return '#e9ecef';
     }
   }};
   color: ${props => {
-    switch (props.status) {
-      case 'upcoming': return '#155724';
-      case 'ongoing': return '#856404';
-      case 'completed': return '#495057';
+    switch (props.$status) {
+      case 'upcoming': return '#28a745';
+      case 'ongoing': return '#fd7e14';
+      case 'completed': return '#dc3545';
       default: return '#495057';
     }
   }};
 `;
+
 
 const OrganizerDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -227,7 +228,7 @@ const OrganizerDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  useEffect(() => {
+useEffect(() => {
     const fetchOrganizerData = async () => {
       try {
         setLoading(true);
@@ -235,6 +236,8 @@ const OrganizerDashboard = () => {
           getOrganizerTournaments(),
           getAllGames()
         ]);
+        
+        console.log('OrganizerDashboard tournamentsData:', tournamentsData);
         
         setTournaments(tournamentsData);
         setGames(gamesData);
@@ -296,41 +299,43 @@ const OrganizerDashboard = () => {
             </EmptyState>
           ) : (
             <CardGrid>
-              {tournaments.map(tournament => (
-                <Card
-                  key={tournament._id}
-                  image={tournament.imageUrl}
-                  title={tournament.name}
-                  description={
-                    <>
-                      <p>Game: {tournament.gameId.name}</p>
-                      <p>Dates: {formatDate(tournament.dates.start)} - {formatDate(tournament.dates.end)}</p>
-                      <p>Status: <StatusBadge status={tournament.status}>{tournament.status}</StatusBadge></p>
-                      <p>Registration: {tournament.registrationOpen ? 'Open' : 'Closed'}</p>
-                    </>
-                  }
-                  footer={
-                    <div style={{ display: 'flex', gap: '0.5rem' }}>
-                      <Button 
-                        as={Link} 
-                        to={`/tournament/${tournament._id}`} 
-                        small
-                        style={{ flex: 1 }}
-                      >
-                        View
-                      </Button>
-                      <Button 
-                        as={Link} 
-                        to={`/tournament/${tournament._id}/edit`} 
-                        variant="secondary" 
-                        small
-                      >
-                        <FaEdit />
-                      </Button>
-                    </div>
-                  }
-                />
-              ))}
+{tournaments.map(tournament => {
+  return (
+    <Card
+      key={tournament._id}
+      image={tournament.imageUrl}
+      title={tournament.name}
+      description={
+        <>
+          <p>Game: {tournament.gameId.name}</p>
+          <p>Dates: {formatDate(tournament.dates.start)} - {formatDate(tournament.dates.end)}</p>
+          <p>Status: <StatusBadge status={tournament.status?.toLowerCase().trim()}>{tournament.status}</StatusBadge></p>
+          <p>Registration: {tournament.registrationOpen ? 'Open' : 'Closed'}</p>
+        </>
+      }
+      footer={
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <Button 
+            as={Link} 
+            to={`/tournament/${tournament._id}`} 
+            small
+            style={{ flex: 1 }}
+          >
+            View
+          </Button>
+          <Button 
+            as={Link} 
+            to={`/tournament/${tournament._id}/edit`} 
+            variant="secondary" 
+            small
+          >
+            <FaEdit />
+          </Button>
+        </div>
+      }
+    />
+  );
+})}
             </CardGrid>
           )}
           

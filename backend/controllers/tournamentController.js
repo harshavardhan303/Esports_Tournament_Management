@@ -1,6 +1,24 @@
+
 const Tournament = require('../models/Tournament');
 const Registration = require('../models/Registration');
 const Match = require('../models/Match');
+
+// @desc    Create a new tournament
+// @route   POST /api/tournaments
+// @access  Private/Organizer
+const getStatusFromDates = (start, end) => {
+  const now = new Date();
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+  console.log(`Calculating status with now=${now.toISOString()}, start=${startDate.toISOString()}, end=${endDate.toISOString()}`);
+  if (now < startDate) {
+    return 'upcoming';
+  } else if (now >= startDate && now <= endDate) {
+    return 'ongoing';
+  } else {
+    return 'completed';
+  }
+};
 
 // @desc    Create a new tournament
 // @route   POST /api/tournaments
@@ -17,6 +35,8 @@ const createTournament = async (req, res) => {
       imageUrl 
     } = req.body;
 
+    const status = getStatusFromDates(startDate, endDate);
+
     const tournament = await Tournament.create({
       name,
       gameId,
@@ -28,6 +48,7 @@ const createTournament = async (req, res) => {
       },
       rules,
       imageUrl: imageUrl || `IMAGE_TOURNAMENT_${Math.floor(Math.random() * 5) + 1}`,
+      status
     });
 
     if (tournament) {
@@ -45,11 +66,21 @@ const createTournament = async (req, res) => {
 // @access  Public
 const getTournaments = async (req, res) => {
   try {
-    const tournaments = await Tournament.find({})
+    let tournaments = await Tournament.find({})
       .populate('gameId', 'name')
       .populate('organizerId', 'name');
     
-    res.json(tournaments);
+    // Update status based on current date
+    const updatedTournaments = await Promise.all(tournaments.map(async (tournament) => {
+      const newStatus = getStatusFromDates(tournament.dates.start, tournament.dates.end);
+      if (tournament.status !== newStatus) {
+        tournament.status = newStatus;
+        await tournament.save();
+      }
+      return tournament;
+    }));
+    
+    res.json(updatedTournaments);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -97,7 +128,6 @@ const updateTournament = async (req, res) => {
       endDate, 
       rules, 
       imageUrl,
-      status,
       registrationOpen 
     } = req.body;
     
@@ -108,7 +138,14 @@ const updateTournament = async (req, res) => {
     
     if (startDate) tournament.dates.start = startDate;
     if (endDate) tournament.dates.end = endDate;
-    if (status) tournament.status = status;
+
+    // Always update status based on current dates
+    const start = tournament.dates.start;
+    const end = tournament.dates.end;
+    const newStatus = getStatusFromDates(start, end);
+    console.log(`Updating tournament status from ${tournament.status} to ${newStatus}`);
+    tournament.status = newStatus;
+    
     if (registrationOpen !== undefined) tournament.registrationOpen = registrationOpen;
     
     const updatedTournament = await tournament.save();
@@ -150,11 +187,21 @@ const deleteTournament = async (req, res) => {
 // @access  Private/Organizer
 const getOrganizerTournaments = async (req, res) => {
   try {
-    const tournaments = await Tournament.find({ organizerId: req.user._id })
+    let tournaments = await Tournament.find({ organizerId: req.user._id })
       .populate('gameId', 'name')
       .sort({ createdAt: -1 });
     
-    res.json(tournaments);
+    // Update status based on current date
+    const updatedTournaments = await Promise.all(tournaments.map(async (tournament) => {
+      const newStatus = getStatusFromDates(tournament.dates.start, tournament.dates.end);
+      if (tournament.status !== newStatus) {
+        tournament.status = newStatus;
+        await tournament.save();
+      }
+      return tournament;
+    }));
+    
+    res.json(updatedTournaments);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

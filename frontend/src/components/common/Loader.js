@@ -10,8 +10,8 @@ const LoaderContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: ${props => props.fullPage ? '3rem' : '1rem'};
-  height: ${props => props.fullPage ? '70vh' : 'auto'};
+  padding: ${props => props.$fullPage ? '3rem' : '1rem'};
+  height: ${props => props.$fullPage ? '70vh' : 'auto'};
 `;
 
 const SpinnerWrapper = styled.div`
@@ -24,8 +24,12 @@ const Spinner = styled.div`
   border: 4px solid rgba(0, 0, 0, 0.1);
   border-radius: 50%;
   border-top: 4px solid #1a2a6c;
-  width: ${props => props.size === 'small' ? '20px' : props.size === 'large' ? '60px' : '40px'};
-  height: ${props => props.size === 'small' ? '20px' : props.size === 'large' ? '60px' : '40px'};
+  width: ${props =>
+    props.$size === 'small' ? '20px' :
+    props.$size === 'large' ? '60px' : '40px'};
+  height: ${props =>
+    props.$size === 'small' ? '20px' :
+    props.$size === 'large' ? '60px' : '40px'};
   animation: ${spin} 1s linear infinite;
   margin-bottom: 1rem;
 `;
@@ -38,9 +42,9 @@ const LoadingText = styled.p`
 
 const Loader = ({ text = 'Loading...', size = 'medium', fullPage = false }) => {
   return (
-    <LoaderContainer fullPage={fullPage}>
+    <LoaderContainer $fullPage={fullPage}>
       <SpinnerWrapper>
-        <Spinner size={size} />
+        <Spinner $size={size} />
         {text && <LoadingText>{text}</LoadingText>}
       </SpinnerWrapper>
     </LoaderContainer>

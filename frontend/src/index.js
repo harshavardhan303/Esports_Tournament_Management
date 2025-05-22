@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createGlobalStyle } from 'styled-components';
 import App from './App';
-
+import { AuthProvider } from './context/AuthContext';
 const GlobalStyle = createGlobalStyle`
   * {
     margin: 0;
@@ -44,9 +44,16 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+
+
+
 root.render(
   <React.StrictMode>
     <GlobalStyle />
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </React.StrictMode>
 );
+

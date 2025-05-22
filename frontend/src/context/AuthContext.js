@@ -1,6 +1,6 @@
-import React, { createContext, useState, useEffect } from 'react';
-import axios from 'axios';
-import jwt_decode from 'jwt-decode';
+import React, { createContext, useState, useEffect } from "react";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
 
 export const AuthContext = createContext();
 
@@ -9,75 +9,54 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    // Check if user is already logged in
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        // Check if token is expired
-        const decodedToken = jwt_decode(token);
-        const currentTime = Date.now() / 1000;
-        
-        if (decodedToken.exp < currentTime) {
-          // Token expired, log out
-          logout();
-        } else {
-          // Set auth token header
-          setAuthToken(token);
-          
-          // Get user data
-          loadUser();
-        }
-      } catch (err) {
-        console.error('Token validation error:', err);
-        logout();
-      }
-    } else {
-      setLoading(false);
-    }
-  }, []);
-
-  // Set axios auth token header
+  // Set auth token in Axios headers
   const setAuthToken = (token) => {
     if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     } else {
-      delete axios.defaults.headers.common['Authorization'];
+      delete axios.defaults.headers.common["Authorization"];
     }
   };
 
-  // Load user data
-  const loadUser = async () => {
-    try {
-      const res = await axios.get('/api/users/profile');
-      setUser(res.data);
-      setLoading(false);
-    } catch (err) {
-      console.error('Load user error:', err.response?.data?.message || err.message);
-      logout();
+  // Load user from token on app start
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decoded = jwt_decode(token);
+        const now = Date.now() / 1000;
+
+        if (decoded.exp < now) {
+          logout();
+        } else {
+          setAuthToken(token);
+          setUser(decoded);
+        }
+      } catch (err) {
+        console.error("Token decode error:", err);
+        logout();
+      }
     }
-  };
+    setLoading(false);
+  }, []);
 
   // Register user
   const register = async (userData) => {
     try {
       setError(null);
-      const res = await axios.post('/api/users/register', userData);
-      
-      // Save token to localStorage
-      localStorage.setItem('token', res.data.token);
-      
-      // Set auth token header
-      setAuthToken(res.data.token);
-      
-      // Set user
-      setUser(res.data);
-      setLoading(false);
-      
-      return { success: true };
+      const response = await axios.post(`http://localhost:3001/api/auth/register`, userData);
+      const { token } = response.data;
+
+      localStorage.setItem("token", token);
+      setAuthToken(token);
+
+      const decoded = jwt_decode(token);
+      setUser(decoded);
+      return { success: true, data: response.data };
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
-      return { success: false, error: err.response?.data?.message || 'Registration failed' };
+      const msg = err.response?.data?.message || "Registration failed";
+      setError(msg);
+      return { success: false, error: msg };
     }
   };
 
@@ -85,51 +64,41 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       setError(null);
-      const res = await axios.post('/api/users/login', { email, password });
-      
-      // Save token to localStorage
-      localStorage.setItem('token', res.data.token);
-      
-      // Set auth token header
-      setAuthToken(res.data.token);
-      
-      // Set user
-      setUser(res.data);
-      setLoading(false);
-      
+      const response = await axios.post(`http://localhost:3001/api/auth/login`, { email, password });
+      const { token } = response.data;
+
+      localStorage.setItem("token", token);
+      setAuthToken(token);
+
+      const decoded = jwt_decode(token);
+      setUser(decoded);
       return { success: true };
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
-      return { success: false, error: err.response?.data?.message || 'Login failed' };
+      const msg = err.response?.data?.message || "Login failed";
+      setError(msg);
+      return { success: false, error: msg };
     }
   };
 
-  // Logout user
+  // Logout
   const logout = () => {
-    // Remove token from localStorage
-    localStorage.removeItem('token');
-    
-    // Remove auth header
+    localStorage.removeItem("token");
     setAuthToken(null);
-    
-    // Clear user
     setUser(null);
     setLoading(false);
   };
 
-  // Update user profile
+  // Update profile (optional)
   const updateProfile = async (userData) => {
     try {
       setError(null);
-      const res = await axios.put('/api/users/profile', userData);
-      
-      // Update user state
-      setUser(res.data);
-      
+      const response = await axios.put(`http://localhost:3001/api/users/profile`, userData);
+      setUser(response.data);
       return { success: true };
     } catch (err) {
-      setError(err.response?.data?.message || 'Profile update failed');
-      return { success: false, error: err.response?.data?.message || 'Profile update failed' };
+      const msg = err.response?.data?.message || "Profile update failed";
+      setError(msg);
+      return { success: false, error: msg };
     }
   };
 
@@ -137,6 +106,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
+        setUser,
         loading,
         error,
         register,
@@ -149,3 +119,6 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+// ✅ Correct default export
+export default AuthProvider;

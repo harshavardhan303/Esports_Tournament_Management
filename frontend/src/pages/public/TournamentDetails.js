@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { FaTrophy, FaCalendarAlt, FaGamepad, FaUser, FaUsers, FaEdit, FaTrash, FaSignInAlt } from 'react-icons/fa';
+import { FaTrophy, FaCalendarAlt, FaGamepad, FaUser, FaUsers, FaEdit, FaTrash, FaSignInAlt, FaPlus } from 'react-icons/fa';
 import { getTournamentById } from '../../services/tournamentService';
 import { getTournamentMatches } from '../../services/matchService';
 import { getTournamentRegistrations } from '../../services/registrationService';
@@ -29,7 +29,7 @@ const TournamentHeader = styled.div`
 
 const TournamentBanner = styled.div`
   height: 250px;
-  background-image: url(${props => props.image});
+  background-image: url(${props => props.$image});
   background-size: cover;
   background-position: center;
   position: relative;
@@ -45,10 +45,10 @@ const TournamentStatus = styled.div`
   text-transform: uppercase;
   font-size: 0.875rem;
   background-color: ${props => {
-    switch (props.status) {
-      case 'upcoming': return '#28a745';
-      case 'ongoing': return '#fd7e14';
-      case 'completed': return '#6c757d';
+    switch (props.$status) {
+      case 'upcoming': return '#28a745'; // green
+      case 'ongoing': return '#fd7e14'; // orange/yellow
+      case 'completed': return '#dc3545'; // red
       default: return '#6c757d';
     }
   }};
@@ -283,18 +283,46 @@ const TournamentDetails = () => {
     const fetchTournamentData = async () => {
       try {
         setLoading(true);
-        const tournamentData = await getTournamentById(id);
+        let tournamentData;
+        try {
+          tournamentData = await getTournamentById(id);
+          if (!tournamentData) {
+            throw new Error('Tournament not found');
+          }
+        } catch (err) {
+          console.error('Error fetching tournament:', err);
+          // Use fallback tournament data if API call fails
+          tournamentData = getFallbackTournament(id);
+        }
         setTournament(tournamentData);
         
         // Fetch matches if tournament exists
-        const matchesData = await getTournamentMatches(id);
+        let matchesData = [];
+        try {
+          matchesData = await getTournamentMatches(id);
+        } catch (err) {
+          console.error('Error fetching matches:', err);
+          // Use fallback matches if API call fails
+          matchesData = getFallbackMatches(id);
+        }
         setMatches(matchesData);
         
         // Fetch registrations if user is organizer or admin
         if (user && (user.role === 'organizer' || user.role === 'admin')) {
-          const registrationsData = await getTournamentRegistrations(id);
-          setRegistrations(registrationsData);
+          let registrationsData = [];
+          try {
+          registrationsData = await getTournamentRegistrations(id);
+        } catch (err) {
+          console.error('Error fetching registrations:', err);
+          // Use fallback registrations if API call fails
+          if (typeof getFallbackRegistrations === 'function') {
+            registrationsData = getFallbackRegistrations(id);
+          } else {
+            registrationsData = [];
+          }
         }
+        setRegistrations(registrationsData);
+      }
       } catch (error) {
         console.error('Error fetching tournament data:', error);
         setError('Failed to load tournament details. Please try again later.');
@@ -305,6 +333,7 @@ const TournamentDetails = () => {
     
     fetchTournamentData();
   }, [id, user]);
+
   
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -320,7 +349,8 @@ const TournamentDetails = () => {
       
       await registerForTournament({
         tournamentId: id,
-        teamName: teamName || `${user.name}'s Team`
+        teamName: teamName || `${user.name}'s Team`,
+        email: user.email
       });
       
       setShowRegistrationModal(false);
@@ -367,17 +397,99 @@ const TournamentDetails = () => {
     );
   }
   
-  const isOrganizer = user && user._id === tournament.organizerId._id;
+  const isOrganizer = user && user.id === tournament.organizerId._id;
   const isAdmin = user && user.role === 'admin';
   const canEdit = isOrganizer || isAdmin;
+
+  const startDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);  // 7 days from now
+  const endDate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000); 
+  
+
+
+  
+  const getFallbackTournament = (tournamentId) => {
+    const fallbackTournaments = [
+      {
+        _id: 'tournament1',
+        name: 'Valorant Championship 2025',
+        gameId: 'game1',
+        game: {
+          _id: 'game1',
+          name: 'Valorant',
+          imageUrl: 'https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt3f072336e3f3ade4/63096d7be4a8c30e088e7720/Valorant_2022_E5A2_PlayVALORANT_ContentStackThumbnail_1200x625_MB01.png'
+        },
+        format: 'Single Elimination',
+        
+        rules: '1. All players must be at least 16 years old\n2. Teams must have exactly 5 players\n3. All players must use the tournament client\n4. Match rules follow official Valorant competitive guidelines',
+        imageUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
+        status: status,
+        registrationOpen: true,
+        organizer: {
+          _id: 'org1',
+          name: 'Esports Organization'
+        }
+      },
+      {
+        _id: 'tournament2',
+        name: 'League of Legends World Cup',
+        gameId: 'game2',
+        game: {
+          _id: 'game2',
+          name: 'League of Legends',
+          imageUrl: 'https://cdn1.epicgames.com/offer/24b9b5e323bc40eea252a10cdd3b2f10/EGS_LeagueofLegends_RiotGames_S1_2560x1440-80471666c140f790f28dff68d72c384b'
+        },
+        format: 'Double Elimination',
+        startDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),
+        endDate: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000).toISOString(),
+        rules: '1. All players must be at least 16 years old\n2. Teams must have exactly 5 players\n3. All players must use the tournament client\n4. Match rules follow official LoL competitive guidelines',
+        imageUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
+        status: 'upcoming',
+        registrationOpen: true,
+        organizer: {
+          _id: 'org1',
+          name: 'Esports Organization'
+        }
+      }
+    ];
+    
+    return fallbackTournaments.find(t => t._id === tournamentId) || fallbackTournaments[0];
+  };
+  
+  const getFallbackMatches = (tournamentId) => {
+    return [
+      {
+        _id: `match1_${tournamentId}`,
+        tournamentId: tournamentId,
+        round: 1,
+        matchNumber: 1,
+        team1: 'Team Alpha',
+        team2: 'Team Beta',
+        scheduledTime: new Date(Date.now() + 8 * 24 * 60 * 60 * 1000).toISOString(),
+        status: 'scheduled',
+        result: null
+      },
+      {
+        _id: `match2_${tournamentId}`,
+        tournamentId: tournamentId,
+        round: 1,
+        matchNumber: 2,
+        team1: 'Team Gamma',
+        team2: 'Team Delta',
+        scheduledTime: new Date(Date.now() + 8 * 24 * 60 * 60 * 1000 + 3 * 60 * 60 * 1000).toISOString(),
+        status: 'scheduled',
+        result: null
+      }
+    ];
+  };
+  
   
   return (
     <TournamentContainer>
       <TournamentHeader>
         <TournamentBanner image={tournament.imageUrl}>
-          <TournamentStatus status={tournament.status}>
-            {tournament.status}
-          </TournamentStatus>
+<TournamentStatus $status={tournament.status?.toLowerCase().trim()}>
+  {tournament.status}
+</TournamentStatus>
         </TournamentBanner>
         
         <TournamentContent>
@@ -397,26 +509,16 @@ const TournamentDetails = () => {
               <FaTrophy /> Format: {tournament.format}
             </MetaItem>
           </TournamentMeta>
-          
+
+
           <ActionButtons>
-            {user && user.role === 'player' && tournament.registrationOpen && tournament.status === 'upcoming' && (
+            {user && !isOrganizer && !isAdmin && (
               <Button onClick={() => setShowRegistrationModal(true)}>
                 <FaSignInAlt /> Register for Tournament
               </Button>
             )}
             
-            {canEdit && (
-              <>
-                <Button as={Link} to={`/tournament/${id}/edit`} variant="secondary">
-                  <FaEdit /> Edit Tournament
-                </Button>
-                {isOrganizer && (
-                  <Button as={Link} to={`/tournament/${id}/matches/add`} variant="success">
-                    <FaPlus /> Add Match
-                  </Button>
-                )}
-              </>
-            )}
+            
           </ActionButtons>
         </TournamentContent>
       </TournamentHeader>
@@ -430,68 +532,28 @@ const TournamentDetails = () => {
         </RulesContent>
       </ContentSection>
       
-      <SectionTitle>
-        <FaTrophy /> Matches
-      </SectionTitle>
       
-      {matches.length === 0 ? (
+      
+      
+
+      {(isOrganizer || isAdmin) && (
         <ContentSection>
-          <p>No matches have been scheduled yet.</p>
-          {canEdit && (
-            <Button as={Link} to={`/tournament/${id}/matches/add`} variant="success" style={{ marginTop: '1rem' }}>
-              <FaPlus /> Schedule First Match
-            </Button>
+          <SectionTitle>
+            <FaUsers /> Registered Teams
+          </SectionTitle>
+          {registrations.length === 0 ? (
+            <p>No teams have registered yet.</p>
+          ) : (
+            <ul>
+              {registrations.map((reg, index) => (
+                <li key={index} style={{ marginBottom: '0.5rem' }}>
+                  <strong>Team:</strong> {reg.teamName} <br />
+                  <strong>Email:</strong> {reg.email || reg.userId?.email || 'N/A'}
+                </li>
+              ))}
+            </ul>
           )}
         </ContentSection>
-      ) : (
-        <MatchesGrid>
-          {matches.map(match => (
-            <MatchCard key={match._id} status={match.status}>
-              <MatchHeader>
-                <MatchDate>
-                  <FaCalendarAlt /> {formatDate(match.date)}
-                </MatchDate>
-                <MatchStatus status={match.status}>
-                  {match.status}
-                </MatchStatus>
-              </MatchHeader>
-              
-              <MatchTeams>
-                <Team>
-                  <TeamName winner={match.winner && match.winner._id === match.teamA._id}>
-                    {match.teamA.teamName}
-                  </TeamName>
-                  <Score winner={match.winner && match.winner._id === match.teamA._id}>
-                    {match.scoreA}
-                  </Score>
-                </Team>
-                
-                <Versus>VS</Versus>
-                
-                <Team>
-                  <TeamName winner={match.winner && match.winner._id === match.teamB._id}>
-                    {match.teamB.teamName}
-                  </TeamName>
-                  <Score winner={match.winner && match.winner._id === match.teamB._id}>
-                    {match.scoreB}
-                  </Score>
-                </Team>
-              </MatchTeams>
-              
-              {canEdit && match.status !== 'completed' && (
-                <Button 
-                  as={Link} 
-                  to={`/match/${match._id}/update`} 
-                  variant="secondary" 
-                  small 
-                  style={{ width: '100%' }}
-                >
-                  <FaEdit /> Update Result
-                </Button>
-              )}
-            </MatchCard>
-          ))}
-        </MatchesGrid>
       )}
       
       {/* Registration Modal */}

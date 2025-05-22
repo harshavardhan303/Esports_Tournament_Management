@@ -8,6 +8,7 @@ const gameRoutes = require('./routes/gameRoutes');
 const tournamentRoutes = require('./routes/tournamentRoutes');
 const registrationRoutes = require('./routes/registrationRoutes');
 const matchRoutes = require('./routes/matchRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -36,6 +37,7 @@ app.use('/api/games', gameRoutes);
 app.use('/api/tournaments', tournamentRoutes);
 app.use('/api/registrations', registrationRoutes);
 app.use('/api/matches', matchRoutes);
+app.use('/api/auth', authRoutes);
 
 // API Root route
 app.get('/api', (req, res) => {

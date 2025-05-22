@@ -3,7 +3,7 @@ import api from './api';
 // Get all games
 export const getAllGames = async () => {
   try {
-    const response = await api.get('/games');
+    const response = await api.get('/api/games');
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Failed to fetch games' };
@@ -13,7 +13,7 @@ export const getAllGames = async () => {
 // Get game by ID
 export const getGameById = async (id) => {
   try {
-    const response = await api.get(`/games/${id}`);
+    const response = await api.get(`/api/games/${id}`);
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Failed to fetch game' };
@@ -23,7 +23,7 @@ export const getGameById = async (id) => {
 // Create new game (organizer only)
 export const createGame = async (gameData) => {
   try {
-    const response = await api.post('/games', gameData);
+    const response = await api.post('/api/games', gameData);
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Failed to create game' };
@@ -33,7 +33,7 @@ export const createGame = async (gameData) => {
 // Update game (organizer only)
 export const updateGame = async (id, gameData) => {
   try {
-    const response = await api.put(`/games/${id}`, gameData);
+    const response = await api.put(`/api/games/${id}`, gameData);
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Failed to update game' };
@@ -43,7 +43,7 @@ export const updateGame = async (id, gameData) => {
 // Get tournaments by game ID
 export const getGameTournaments = async (gameId) => {
   try {
-    const response = await api.get(`/games/${gameId}/tournaments`);
+    const response = await api.get(`/api/games/${gameId}/tournaments`);
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Failed to fetch tournaments for this game' };

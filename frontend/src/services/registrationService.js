@@ -3,7 +3,7 @@ import api from './api';
 // Register for a tournament
 export const registerForTournament = async (registrationData) => {
   try {
-    const response = await api.post('/registrations', registrationData);
+    const response = await api.post('/api/registrations', registrationData);
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Failed to register for tournament' };
@@ -13,7 +13,7 @@ export const registerForTournament = async (registrationData) => {
 // Get user's registrations
 export const getUserRegistrations = async () => {
   try {
-    const response = await api.get('/registrations/myregistrations');
+    const response = await api.get('/api/registrations/myregistrations');
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Failed to fetch your registrations' };
@@ -23,7 +23,7 @@ export const getUserRegistrations = async () => {
 // Get tournament registrations (organizer only)
 export const getTournamentRegistrations = async (tournamentId) => {
   try {
-    const response = await api.get(`/registrations/tournament/${tournamentId}`);
+    const response = await api.get(`/api/registrations/tournament/${tournamentId}`);
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Failed to fetch tournament registrations' };
@@ -33,7 +33,7 @@ export const getTournamentRegistrations = async (tournamentId) => {
 // Update registration status (organizer only)
 export const updateRegistrationStatus = async (registrationId, status) => {
   try {
-    const response = await api.put(`/registrations/${registrationId}`, { status });
+    const response = await api.put(`/api/registrations/${registrationId}`, { status });
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Failed to update registration status' };
@@ -43,7 +43,7 @@ export const updateRegistrationStatus = async (registrationId, status) => {
 // Cancel registration
 export const cancelRegistration = async (registrationId) => {
   try {
-    const response = await api.delete(`/registrations/${registrationId}`);
+    const response = await api.delete(`/api/registrations/${registrationId}`);
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Failed to cancel registration' };

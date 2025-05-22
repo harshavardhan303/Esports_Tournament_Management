@@ -79,13 +79,13 @@ const Footer = () => {
           </FooterTitle>
           <p>The premier platform for esports tournament management. Organize, compete, and win in your favorite games.</p>
           <SocialLinks>
-            <SocialIcon href="#" target="_blank" rel="noopener noreferrer">
+            <SocialIcon href="https://twitter.com" target="_blank" rel="noopener noreferrer">
               <FaTwitter />
             </SocialIcon>
-            <SocialIcon href="#" target="_blank" rel="noopener noreferrer">
+            <SocialIcon href="https://discord.com" target="_blank" rel="noopener noreferrer">
               <FaDiscord />
             </SocialIcon>
-            <SocialIcon href="#" target="_blank" rel="noopener noreferrer">
+            <SocialIcon href="https://twitch.tv" target="_blank" rel="noopener noreferrer">
               <FaTwitch />
             </SocialIcon>
           </SocialLinks>
@@ -95,22 +95,22 @@ const Footer = () => {
           <FooterTitle>
             <FaGamepad /> Popular Games
           </FooterTitle>
-          <FooterLink href="#">Valorant</FooterLink>
-          <FooterLink href="#">BGMI</FooterLink>
-          <FooterLink href="#">Free Fire</FooterLink>
-          <FooterLink href="#">Call of Duty: Mobile</FooterLink>
-          <FooterLink href="#">Rocket League</FooterLink>
+          <FooterLink href="/tournaments/valorant" target="_blank" rel="noopener noreferrer">Valorant</FooterLink>
+          <FooterLink href="/tournaments/bgmi" target="_blank" rel="noopener noreferrer">BGMI</FooterLink>
+          <FooterLink href="/tournaments/free-fire" target="_blank" rel="noopener noreferrer">Free Fire</FooterLink>
+          <FooterLink href="/tournaments/cod-mobile" target="_blank" rel="noopener noreferrer">Call of Duty: Mobile</FooterLink>
+          <FooterLink href="/tournaments/rocket-league" target="_blank" rel="noopener noreferrer">Rocket League</FooterLink>
         </FooterSection>
         
         <FooterSection>
           <FooterTitle>
             <FaTrophy /> Tournaments
           </FooterTitle>
-          <FooterLink href="#">Upcoming Tournaments</FooterLink>
-          <FooterLink href="#">Ongoing Tournaments</FooterLink>
-          <FooterLink href="#">Past Results</FooterLink>
-          <FooterLink href="#">Tournament Rules</FooterLink>
-          <FooterLink href="#">Prize Pools</FooterLink>
+          <FooterLink href="/tournaments?status=upcoming">Upcoming Tournaments</FooterLink>
+          <FooterLink href="/tournaments?status=ongoing">Ongoing Tournaments</FooterLink>
+          <FooterLink href="/tournaments?status=completed">Past Results</FooterLink>
+          <FooterLink href="/rules">Tournament Rules</FooterLink>
+          <FooterLink href="/prizes">Prize Pools</FooterLink>
         </FooterSection>
         
         <FooterSection>
@@ -118,8 +118,8 @@ const Footer = () => {
             <FaEnvelope /> Contact Us
           </FooterTitle>
           <p>Have questions or need support?</p>
-          <p>Email: support@tecesports.com</p>
-          <p>Discord: TEC Esports Server</p>
+          <p>Email: <a href="mailto:support@tecesports.com" style={{color: '#ddd', textDecoration: 'underline'}}>support@tecesports.com</a></p>
+          <p>Discord: <a href="https://discord.com/invite/tecesports" target="_blank" rel="noopener noreferrer" style={{color: '#ddd', textDecoration: 'underline'}}>TEC Esports Server</a></p>
           <p>Hours: 9am - 6pm IST</p>
         </FooterSection>
       </FooterContent>

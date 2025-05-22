@@ -58,7 +58,7 @@ const getTournamentRegistrations = async (req, res) => {
     }
     
     // Check if user is the organizer or an admin
-    if (tournament.organizerId.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    if (req.user.role !== 'organizer' && req.user.role !== 'admin') {
       return res.status(403).json({ message: 'Not authorized to view these registrations' });
     }
     

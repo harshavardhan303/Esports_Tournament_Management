@@ -183,7 +183,10 @@ const StatusBadge = styled.span`
   font-weight: 600;
   text-transform: uppercase;
   background-color: ${props => {
-    switch (props.status) {
+    switch (props.$status) {
+      case 'upcoming': return '#28a745'; // green
+      case 'ongoing': return '#fd7e14'; // orange/yellow
+      case 'completed': return '#dc3545'; // red
       case 'approved': return '#d4edda';
       case 'rejected': return '#f8d7da';
       case 'pending': return '#fff3cd';
@@ -191,7 +194,10 @@ const StatusBadge = styled.span`
     }
   }};
   color: ${props => {
-    switch (props.status) {
+    switch (props.$statusstatus) {
+      case 'upcoming': return '#155724'; // dark green
+      case 'ongoing': return '#856404'; // dark orange
+      case 'completed': return '#721c24'; // dark red
       case 'approved': return '#155724';
       case 'rejected': return '#721c24';
       case 'pending': return '#856404';
@@ -207,7 +213,7 @@ const PlayerDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  useEffect(() => {
+useEffect(() => {
     const fetchPlayerData = async () => {
       try {
         setLoading(true);
@@ -215,6 +221,8 @@ const PlayerDashboard = () => {
           getUserRegistrations(),
           getPlayerMatches()
         ]);
+        
+        console.log('PlayerDashboard registrationsData:', registrationsData);
         
         setRegistrations(registrationsData);
         setMatches(matchesData);
@@ -274,29 +282,35 @@ const PlayerDashboard = () => {
             </EmptyState>
           ) : (
             <CardGrid>
-              {registrations.map(registration => (
-                <Card
-                  key={registration._id}
-                  image={registration.tournamentId.imageUrl}
-                  title={registration.tournamentId.name}
-                  description={
-                    <>
-                      <p>Game: {registration.tournamentId.gameId.name}</p>
-                      <p>Team: {registration.teamName}</p>
-                      <p>Status: <StatusBadge status={registration.status}>{registration.status}</StatusBadge></p>
-                    </>
-                  }
-                  footer={
-                    <Button 
-                      as={Link} 
-                      to={`/tournament/${registration.tournamentId._id}`} 
-                      small
-                    >
-                      View Tournament
-                    </Button>
-                  }
-                />
-              ))}
+{registrations.map(registration => {
+  console.log('Registration status:', registration.status);
+  console.log('Tournament status:', registration.tournamentId.status);
+  alert(`Registration status: ${registration.status}, Tournament status: ${registration.tournamentId.status}`);
+  return (
+    <Card
+      key={registration._id}
+      image={registration.tournamentId.imageUrl}
+      title={registration.tournamentId.name}
+      description={
+        <>
+          <p>Game: {registration.tournamentId.gameId.name}</p>
+          <p>Team: {registration.teamName}</p>
+<p>Tournament Status: <StatusBadge status={registration.tournamentId.status?.toLowerCase().trim()}>{registration.tournamentId.status}</StatusBadge></p>
+<p>Registration Status: <StatusBadge status={registration.status?.toLowerCase().trim()}>{registration.status}</StatusBadge></p>
+        </>
+      }
+      footer={
+        <Button 
+          as={Link} 
+          to={`/tournament/${registration.tournamentId._id}`} 
+          small
+        >
+          View Tournament
+        </Button>
+      }
+    />
+  );
+})}
             </CardGrid>
           )}
           
@@ -383,6 +397,16 @@ const PlayerDashboard = () => {
             </StatsList>
           </StatsCard>
         </Sidebar>
+        {user.role === 'organizer' && (
+          <Sidebar>
+            <Button as={Link} to="/games/add" style={{ marginBottom: '1rem', width: '100%' }}>
+              Add New Game
+            </Button>
+            <Button as={Link} to="/tournaments/add" style={{ width: '100%' }}>
+              Add New Tournament
+            </Button>
+          </Sidebar>
+        )}
       </DashboardGrid>
     </DashboardContainer>
   );

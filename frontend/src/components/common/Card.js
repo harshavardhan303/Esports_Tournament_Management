@@ -19,7 +19,7 @@ const CardContainer = styled.div`
 
 const CardImage = styled.div`
   height: 200px;
-  background-image: url(${props => props.image});
+  background-image: url(${props => props.$image});
   background-size: cover;
   background-position: center;
 `;
@@ -51,9 +51,12 @@ const CardFooter = styled.div`
 `;
 
 const Card = ({ image, title, description, footer, onClick }) => {
+  const fallbackImage = 'https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80';
+  const imageUrl = image && image.startsWith('http') ? image : fallbackImage;
+
   return (
     <CardContainer onClick={onClick}>
-      {image && <CardImage image={image} />}
+      <CardImage $image={imageUrl} />
       <CardContent>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>

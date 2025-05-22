@@ -371,28 +371,31 @@ const AdminDashboard = () => {
                 </tr>
               </TableHead>
               <TableBody>
-                {tournaments.slice(0, 5).map(tournament => (
-                  <TableRow key={tournament._id}>
-                    <TableCell>{tournament.name}</TableCell>
-                    <TableCell>{tournament.gameId.name}</TableCell>
-                    <TableCell>{tournament.organizerId.name}</TableCell>
-                    <TableCell>
-                      {formatDate(tournament.dates.start)} - {formatDate(tournament.dates.end)}
-                    </TableCell>
-                    <TableCell>
-                      <StatusBadge status={tournament.status}>{tournament.status}</StatusBadge>
-                    </TableCell>
-                    <TableCell>
-                      <Button 
-                        as={Link} 
-                        to={`/tournament/${tournament._id}`} 
-                        small
-                      >
-                        View
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+{tournaments.slice(0, 5).map(tournament => {
+  console.log('Tournament status:', tournament.status);
+  return (
+    <TableRow key={tournament._id}>
+      <TableCell>{tournament.name}</TableCell>
+      <TableCell>{tournament.gameId.name}</TableCell>
+      <TableCell>{tournament.organizerId.name}</TableCell>
+      <TableCell>
+        {formatDate(tournament.dates.start)} - {formatDate(tournament.dates.end)}
+      </TableCell>
+      <TableCell>
+        <StatusBadge status={tournament.status}>{tournament.status}</StatusBadge>
+      </TableCell>
+      <TableCell>
+        <Button 
+          as={Link} 
+          to={`/tournament/${tournament._id}`} 
+          small
+        >
+          View
+        </Button>
+      </TableCell>
+    </TableRow>
+  );
+})}
               </TableBody>
             </Table>
           </TableContainer>

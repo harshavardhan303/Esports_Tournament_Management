@@ -85,32 +85,32 @@ const Navbar = () => {
         <NavLink to="/games">
           <FaGamepad /> Games
         </NavLink>
-        
+
         {user ? (
           <>
-            {/* Links based on user role */}
-            {user.role === 'admin' && (
+            {/* Dynamic Dashboard based on role */}
+            {user?.role === 'admin' && (
               <NavLink to="/dashboard/admin">
                 <FaUsers /> Admin Dashboard
               </NavLink>
             )}
-            
-            {user.role === 'organizer' && (
+
+            {user?.role === 'organizer' && (
               <NavLink to="/dashboard/organizer">
                 <FaTrophy /> Organizer Dashboard
               </NavLink>
             )}
-            
-            {user.role === 'player' && (
+
+            {user?.role === 'player' && (
               <NavLink to="/dashboard/player">
                 <FaGamepad /> Player Dashboard
               </NavLink>
             )}
-            
+
             <NavLink to="/profile">
               <FaUser /> Profile
             </NavLink>
-            
+
             <Button onClick={handleLogout}>
               <FaSignOutAlt /> Logout
             </Button>

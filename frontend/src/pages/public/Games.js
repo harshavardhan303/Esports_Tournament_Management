@@ -103,11 +103,22 @@ const Games = () => {
     const fetchGames = async () => {
       try {
         const gamesData = await getAllGames();
-        setGames(gamesData);
-        setFilteredGames(gamesData);
+        if (gamesData && gamesData.length > 0) {
+          setGames(gamesData);
+          setFilteredGames(gamesData);
+        } else {
+          // Use fallback data if API returns empty array
+          const fallbackGames = getFallbackGames();
+          setGames(fallbackGames);
+          setFilteredGames(fallbackGames);
+        }
       } catch (error) {
         console.error('Error fetching games:', error);
         setError('Failed to load games. Please try again later.');
+        // Use fallback data if API call fails
+        const fallbackGames = getFallbackGames();
+        setGames(fallbackGames);
+        setFilteredGames(fallbackGames);
       } finally {
         setLoading(false);
       }
@@ -115,6 +126,48 @@ const Games = () => {
     
     fetchGames();
   }, []);
+  
+  // Fallback data in case API calls fail
+  const getFallbackGames = () => {
+    return [
+      {
+        _id: 'game1',
+        name: 'Valorant',
+        description: 'A 5v5 character-based tactical FPS by Riot Games',
+        imageUrl: 'https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt3f072336e3f3ade4/63096d7be4a8c30e088e7720/Valorant_2022_E5A2_PlayVALORANT_ContentStackThumbnail_1200x625_MB01.png'
+      },
+      {
+        _id: 'game2',
+        name: 'League of Legends',
+        description: 'A popular MOBA game developed by Riot Games',
+        imageUrl: 'https://cdn1.epicgames.com/offer/24b9b5e323bc40eea252a10cdd3b2f10/EGS_LeagueofLegends_RiotGames_S1_2560x1440-80471666c140f790f28dff68d72c384b'
+      },
+      {
+        _id: 'game3',
+        name: 'Counter-Strike 2',
+        description: 'The next evolution of the iconic FPS from Valve',
+        imageUrl: 'https://cdn.cloudflare.steamstatic.com/steam/apps/730/capsule_616x353.jpg'
+      },
+      {
+        _id: 'game4',
+        name: 'Dota 2',
+        description: 'A free-to-play MOBA game by Valve',
+        imageUrl: 'https://cdn.cloudflare.steamstatic.com/steam/apps/570/capsule_616x353.jpg'
+      },
+      {
+        _id: 'game5',
+        name: 'Fortnite',
+        description: 'A battle royale game developed by Epic Games',
+        imageUrl: 'https://cdn2.unrealengine.com/battle-royale-promo-image-1920x1080-1920x1080-119208936.jpg'
+      },
+      {
+        _id: 'game6',
+        name: 'Overwatch 2',
+        description: 'A team-based action game by Blizzard Entertainment',
+        imageUrl: 'https://blz-contentstack-images.akamaized.net/v3/assets/blt9c12f249ac15c7ec/blt0c118364c9d927b0/62ea14f8a20cf34d5c689339/ow2-beta-header-desktop.jpg'
+      }
+    ];
+  };
   
   useEffect(() => {
     if (searchTerm.trim() === '') {

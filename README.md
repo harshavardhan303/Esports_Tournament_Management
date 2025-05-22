@@ -33,7 +33,7 @@ A comprehensive platform for managing esports tournaments, supporting multiple g
 
 - **Frontend**: React.js with styled-components
 - **Backend**: Node.js + Express.js
-- **Database**: MongoDB Atlas
+- **Database**: MongoDB Atlas or local MongoDB
 - **Authentication**: JWT (JSON Web Tokens)
 
 ## 📦 Project Structure
@@ -76,7 +76,7 @@ A comprehensive platform for managing esports tournaments, supporting multiple g
 
 - Node.js (v14 or higher)
 - npm or yarn
-- MongoDB Atlas account
+- MongoDB Atlas account or local MongoDB installation
 
 ### Installation
 
@@ -99,27 +99,43 @@ npm install
 ```
 
 4. Set up environment variables
-   - Create a `.env` file in the backend directory
-   - Add the following variables:
-     ```
-     MONGODB_URI=mongodb+srv://harsha:y4xKacgBkym3R74r@cluster0.h492d1l.mongodb.net/esports_tournament
-     JWT_SECRET=your_super_secret_jwt_key_here
-     PORT=5000
-     ```
 
-5. Start the backend server
+- Create a `.env` file in the `backend` directory with the following variables:
+```
+MONGODB_URI=your_mongodb_connection_string_here
+JWT_SECRET=your_super_secret_jwt_key_here
+PORT=5000
+```
+- If you want to use a local MongoDB instance, your `MONGODB_URI` might look like:
+```
+mongodb://localhost:27017/esports_tournament
+```
+- For MongoDB Atlas, use the connection string provided by your Atlas cluster, replacing username, password, and cluster info accordingly.
+
+### Running the Application
+
+1. Start the backend server
 ```bash
 cd ../backend
 npm start
 ```
 
-6. Start the frontend development server
+2. Start the frontend development server
 ```bash
 cd ../frontend
 npm start
 ```
 
-7. Open your browser and navigate to `http://localhost:3000`
+3. Open your browser and navigate to `http://localhost:3000`
+
+### Installing MongoDB Locally (Optional)
+
+If you prefer to run MongoDB locally instead of using MongoDB Atlas:
+
+- Download and install MongoDB Community Server from https://www.mongodb.com/try/download/community
+- Follow the installation instructions for your OS
+- Start the MongoDB server (mongod)
+- Use the connection string `mongodb://localhost:27017/esports_tournament` in your `.env` file
 
 ## 🎮 Pre-loaded Games
 
